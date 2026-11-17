@@ -1,5 +1,7 @@
 #include "chip8.h"
+#include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <string.h>
 
 #define FONT_ADDR 0x050
@@ -28,4 +30,25 @@ void chip8_init(Chip8 *c) {
 
     c->PC = START_ADDRESS;
     memcpy(c->memory + FONT_ADDR, FONT_SET, sizeof(FONT_SET));
+}
+
+bool chip8_load_rom(Chip8 *c, const char *file) {
+    FILE *fptr = fopen(file, "rb");
+
+    if (fptr == NULL)
+        return false;
+
+    fseek(fptr, 0, SEEK_END);
+    long rom_size = ftell(fptr);
+    rewind(fptr);
+
+    if (rom_size > MAX_ROM_SIZE)
+        return false;
+
+    fread(&c->memory[START_ADDRESS], 1, rom_size, fptr);
+
+    fclose(fptr);
+    printf("Rom from %s has been loaded!\n", file);
+
+    return true;
 }

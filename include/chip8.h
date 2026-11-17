@@ -1,6 +1,7 @@
 #ifndef CHIP8_H
 #define CHIP8_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #define MEMORY_SIZE 4096
@@ -21,6 +22,6 @@ typedef struct Chip8 {
 
 void chip8_init(Chip8 *chip8);
 
-void chip8_load_rom(Chip8 *chip8);
+bool chip8_load_rom(Chip8 *chip8, const char *file);
 
 #endif // !CHIP8_H
